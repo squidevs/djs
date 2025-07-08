@@ -4,3 +4,7 @@ Data;Nome;Email;Telefone;CPF;Tipo_Seguro;Veiculo;CEP;Observacoes;WhatsApp
 30/06/2025, 22:27:03;Beatriz;beatriz@gmail.com;5519995910737;47593336816;Seguro Auto;BMW;;Tipo: auto | Veículo: BMW;5519995910737@c.us
 30/06/2025, 22:40:12;git;git@gmail.com;5519995910737;47593336816;Seguro Residencial;;;Tipo: residencial;5519995910737@c.us
 30/06/2025, 23:00:26;Roberto justos;roberto@gmail.com;5519982373776;54010772972;Seguro Auto;CHEVROLET;;Tipo: auto | Veículo: CHEVROLET;5519982373776@c.us
+07/07/2025, 23:56:02;Matheis;matheus@gmail.com;5519995910737;47593336816;Seguro;;;;5519995910737@c.us
+08/07/2025, 00:04:24;Teste;teste@teste.com;5519995910737;47593336816;Seguro;;;;5519995910737@c.us
+08/07/2025, 00:11:48;Aaaaaaa;aaa@aaa.com;5519995910737;47593336816;Seguro;;;;5519995910737@c.us
+08/07/2025, 01:43:09;matheus;a@a.com;5519995910737;47593336816;Seguro Auto;fiat;13064500;Tipo: auto | Marca: fiat | Placa: ABC7777 | CEP Pernoite: 13064-500;5519995910737@c.us

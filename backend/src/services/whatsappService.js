@@ -65,22 +65,35 @@ class WhatsAppService {
     }
 
     /**
-     * Envia mensagem de texto
+     * Envia mensagem de texto com delay e indicador de digitação
      * @param {string} to - Número de destino
      * @param {string} text - Texto a ser enviado
+     * @param {boolean} withTyping - Se deve mostrar indicador de digitação
+     * @param {number} delay - Delay adicional em ms
      * @returns {Promise<boolean>} Sucesso do envio
      */
-    async sendText(to, text) {
+    async sendText(to, text, withTyping = true, delay = 1500) {
         try {
             if (!this.isServiceReady()) {
-                this.queueMessage(() => this.sendText(to, text));
+                this.queueMessage(() => this.sendText(to, text, withTyping, delay));
                 return false;
             }
 
             const formattedTo = Utils.formatPhone(to);
+            
+            // Envia indicador de digitação se solicitado
+            if (withTyping) {
+                await this.sendTyping(formattedTo, delay);
+                await Utils.delay(delay);
+            }
+            
             await this.client.sendText(formattedTo, text);
             
             console.log(`Texto enviado para ${to}: ${Utils.truncateText(text)}`);
+            
+            // Delay após envio para simular pausa natural
+            await Utils.delay(800);
+            
             return true;
         } catch (error) {
             console.error('Erro ao enviar texto:', error);
@@ -89,29 +102,41 @@ class WhatsAppService {
     }
 
     /**
-     * Envia menu de lista interativo
+     * Envia menu de lista interativo com delay e digitação
      * @param {string} to - Número de destino
      * @param {Object} menuConfig - Configuração do menu
+     * @param {boolean} withTyping - Se deve mostrar indicador de digitação
+     * @param {number} delay - Delay antes do envio
      * @returns {Promise<boolean>} Sucesso do envio
      */
-    async sendListMessage(to, menuConfig) {
+    async sendListMessage(to, menuConfig, withTyping = true, delay = 1200) {
         try {
             if (!this.isServiceReady()) {
-                this.queueMessage(() => this.sendListMessage(to, menuConfig));
+                this.queueMessage(() => this.sendListMessage(to, menuConfig, withTyping, delay));
                 return false;
             }
 
             const formattedTo = Utils.formatPhone(to);
             
+            // Envia indicador de digitação se solicitado
+            if (withTyping) {
+                await this.sendTyping(formattedTo, delay);
+                await Utils.delay(delay);
+            }
+            
             // Valida configuração do menu
             if (!this.validateMenuConfig(menuConfig)) {
                 console.error('Configuração de menu inválida');
-                return await this.sendText(to, 'Erro ao exibir opções. Por favor, tente novamente digitando "menu".');
+                return await this.sendText(to, 'Erro ao exibir opções. Por favor, tente novamente digitando "menu".', false);
             }
 
             await this.client.sendListMessage(formattedTo, menuConfig);
             
             console.log(`Menu enviado para ${to}: ${menuConfig.title}`);
+            
+            // Delay após envio
+            await Utils.delay(600);
+            
             return true;
         } catch (error) {
             console.error('Erro ao enviar menu:', error);
@@ -119,7 +144,7 @@ class WhatsAppService {
             // Fallback: envia como texto simples
             try {
                 const fallbackText = this.convertMenuToText(menuConfig);
-                return await this.sendText(to, fallbackText);
+                return await this.sendText(to, fallbackText, false);
             } catch (fallbackError) {
                 console.error('Erro no fallback:', fallbackError);
                 return false;
@@ -379,6 +404,39 @@ class WhatsAppService {
         } catch (error) {
             console.error('Erro ao obter informações do contato:', error);
             return null;
+        }
+    }
+
+    /**
+     * Envia notificação de transferência APENAS para o corretor
+     * @param {string} clientName - Nome do cliente
+     * @param {string} clientContact - Contato do cliente (telefone/email)
+     * @param {string} reason - Motivo da transferência
+     * @param {string} brokerNumber - Número do corretor (opcional)
+     */
+    async notifyBrokerTransfer(clientName, clientContact, reason, brokerNumber = null) {
+        try {
+            // Número do corretor - pega do .env ou usa padrão
+            const defaultBrokerNumber = process.env.BROKER_WHATSAPP || '5519995910737';
+            const brokerTo = brokerNumber || defaultBrokerNumber;
+            
+            const notificationMessage = 
+                `🔔 *Nova Transferência de Cliente*\n\n` +
+                `👤 *Cliente:* ${clientName || 'Não informado'}\n` +
+                `📞 *Contato:* ${clientContact || 'Não disponível'}\n` +
+                `📋 *Motivo:* ${reason}\n` +
+                `⏰ *Horário:* ${new Date().toLocaleString('pt-BR')}\n\n` +
+                `💡 *O cliente está aguardando atendimento no WhatsApp.*`;
+            
+            // CRÍTICO: Envia APENAS para o corretor, nunca para o cliente
+            const brokerFormatted = Utils.formatPhone(brokerTo);
+            await this.client.sendText(brokerFormatted, notificationMessage);
+            
+            console.log(`✅ Notificação de transferência enviada APENAS para o corretor: ${brokerTo}`);
+            return true;
+        } catch (error) {
+            console.error('❌ Erro ao enviar notificação de transferência:', error);
+            return false;
         }
     }
 

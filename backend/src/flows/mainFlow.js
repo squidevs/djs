@@ -27,11 +27,10 @@ class MainFlow {
         this.flows.set('cotacao', this.handleCotacao.bind(this));
         this.flows.set('renovacao', this.handleRenovacao.bind(this));
         this.flows.set('sinistro', this.handleSinistro.bind(this));
-        this.flows.set('segunda_via', this.handleSegundaVia.bind(this));
-        this.flows.set('pagamento', this.handlePagamento.bind(this));
         this.flows.set('seguradoras', this.handleSeguradoras.bind(this));
         this.flows.set('seguradora_info', this.handleSeguradoraInfo.bind(this));
         this.flows.set('atendimento', this.handleAtendimento.bind(this));
+        this.flows.set('finalization', this.handleFinalization.bind(this));
     }
 
     /**
@@ -177,7 +176,7 @@ class MainFlow {
         const normalized = utils.normalizeText(input);
         const optionNumber = utils.extractOptionNumber(input);
 
-        // Opção 1: Já sou cliente
+        // Opção 1: Já sou cliente - Simplificado
         if (input.includes('option_1') || 
             input.includes('cliente') || 
             normalized.includes('cliente') || 
@@ -189,10 +188,13 @@ class MainFlow {
                 currentStep: 'menu_principal',
                 data: { ...session.data, tipo_usuario: 'cliente' }
             });
+            
+            // Envia mensagem simplificada para clientes
+            await whatsappService.sendText(from, menuService.getExistingClientMessage());
             return await this.sendMainMenu(from);
         }
 
-        // Opção 2: Quero cotar
+        // Opção 2: Quero cotar - Direcionamento direto
         if (input.includes('option_2') || 
             input.includes('cotacao') || 
             normalized.includes('cotar') || 
@@ -200,13 +202,18 @@ class MainFlow {
             normalized.includes('cotacao') ||
             optionNumber === 2) {
             
+            // Direcionamento DIRETO para cotação sem redirecionamentos
             return await cotacaoFlow.start(from);
         }
 
-        // Opção inválida
+        // Opção inválida - Tratamento melhorado
         await whatsappService.sendText(from, 
-            '❓ Opção não reconhecida.\n\n' +
-            'Por favor, escolha uma das opções do menu ou digite "menu" para recomeçar.'
+            '❓ *Opção não reconhecida.*\n\n' +
+            'Escolha uma das opções abaixo:\n\n' +
+            '🔹 Tentar novamente\n' +
+            '🔹 Voltar ao menu anterior\n' +
+            '🔹 Encerrar atendimento\n\n' +
+            '💡 Digite "menu" para recomeçar.'
         );
         return false;
     }
@@ -230,6 +237,11 @@ class MainFlow {
      */
     async handleMainMenu(from, input, session) {
         const normalized = utils.normalizeText(input);
+
+        // Tratamento global de voltar
+        if (utils.isRequestingBack(normalized)) {
+            return await this.sendWelcome(from);
+        }
 
         // Nova cotação - múltiplas formas de identificar
         if (input.includes('option_1') || 
@@ -261,44 +273,41 @@ class MainFlow {
             return await this.sendSinistroMenu(from);
         }
 
-        // Segunda via
+        // Segunda via - Transfere IMEDIATAMENTE para atendente
         if (input.includes('option_4') ||
             input.includes('segunda_via') || 
             normalized.includes('segunda via') ||
             normalized.includes('2a via') ||
             normalized.includes('documentos') ||
+            normalized.includes('boleto') ||
             utils.extractOptionNumber(input) === 4) {
-            stateManager.updateUserSession(from, { currentFlow: 'segunda_via' });
-            return await this.sendSegundaViaMenu(from);
+            
+            await whatsappService.sendText(from, 
+                '📄 *2ª Via de Documento/Boleto*\n\n' +
+                'Entendi! Estou te transferindo para um atendente para ajudar com sua 2ª via.\n\n' +
+                '⏳ Aguarde um momento...'
+            );
+            
+            return await this.transferToHuman(from, '2ª Via de Documento/Boleto');
         }
 
-        // Pagamento
+        // Seguradoras  
         if (input.includes('option_5') ||
-            input.includes('pagamento') || 
-            normalized.includes('pagamento') ||
-            normalized.includes('informacoes de pagamento') ||
-            utils.extractOptionNumber(input) === 5) {
-            stateManager.updateUserSession(from, { currentFlow: 'pagamento' });
-            return await this.sendPagamentoMenu(from);
-        }
-
-        // Seguradoras
-        if (input.includes('option_6') ||
             input.includes('seguradoras') || 
             normalized.includes('seguradora') ||
             normalized.includes('contatos das seguradoras') ||
-            utils.extractOptionNumber(input) === 6) {
+            utils.extractOptionNumber(input) === 5) {
             stateManager.updateUserSession(from, { currentFlow: 'seguradoras' });
             return await this.sendSeguradorasMenu(from);
         }
 
         // Atendimento
-        if (input.includes('option_7') ||
+        if (input.includes('option_6') ||
             input.includes('atendimento') || 
             normalized.includes('atendente') ||
             normalized.includes('falar com atendente') ||
-            utils.extractOptionNumber(input) === 7) {
-            return await this.transferToHuman(from);
+            utils.extractOptionNumber(input) === 6) {
+            return await this.transferToHuman(from, 'Solicitação direta');
         }
 
         return await this.handleInvalidOption(from);
@@ -337,7 +346,7 @@ class MainFlow {
     }
 
     /**
-     * Manipula fluxo de renovação
+     * Manipula fluxo de renovação - Simplificado
      * @param {string} from - Número do usuário
      * @param {string} input - Entrada do usuário
      * @param {Object} session - Sessão do usuário
@@ -346,29 +355,19 @@ class MainFlow {
     async handleRenovacao(from, input, session) {
         const normalized = utils.normalizeText(input);
 
-        if (input.includes('voltar') || normalized.includes('voltar')) {
+        // Voltar ao menu principal
+        if (input.includes('voltar') || normalized.includes('voltar') || utils.isRequestingBack(normalized)) {
             stateManager.updateUserSession(from, { currentFlow: 'main_menu' });
             return await this.sendMainMenu(from);
         }
 
-        if (input.includes('contato') || normalized.includes('corretor')) {
-            return await this.transferToHuman(from);
+        // Falar com atendente
+        if (input.includes('contato') || normalized.includes('atendente') || normalized.includes('corretor')) {
+            return await this.transferToHuman(from, 'Renovação de Apólice');
         }
 
-        // Informações gerais sobre renovação
-        await whatsappService.sendText(from,
-            '🔄 *Renovação de Apólice*\n\n' +
-            '📋 *Documentos geralmente necessários:*\n' +
-            '• Apólice atual\n' +
-            '• RG e CPF\n' +
-            '• Comprovante de residência atualizado\n\n' +
-            '⏰ *Prazos importantes:*\n' +
-            '• Renovação deve ser feita até 30 dias antes do vencimento\n' +
-            '• Após vencimento, pode haver carência\n\n' +
-            '💡 Para informações específicas da sua apólice, vou te conectar com nosso atendimento especializado.'
-        );
-
-        return await this.transferToHuman(from);
+        // Qualquer outra opção, transfere para atendente
+        return await this.transferToHuman(from, 'Renovação de Apólice');
     }
 
     /**
@@ -382,127 +381,84 @@ class MainFlow {
     }
 
     /**
-     * Manipula fluxo de sinistro
+     * Manipula fluxo de sinistro - Reestruturado
      * @param {string} from - Número do usuário
      * @param {string} input - Entrada do usuário
      * @param {Object} session - Sessão do usuário
      * @returns {Promise<boolean>} Sucesso do processamento
      */
     async handleSinistro(from, input, session) {
-        const normalized = utils.normalizeText(input);
+        try {
+            const normalized = utils.normalizeText(input);
 
-        if (input.includes('voltar') || normalized.includes('voltar')) {
+            // Voltar ao menu principal
+            if (input.includes('voltar') || normalized.includes('voltar') || utils.isRequestingBack(normalized)) {
+                stateManager.updateUserSession(from, { currentFlow: 'main_menu' });
+                return await this.sendMainMenu(from);
+            }
+
+            // CORREÇÃO: Detecção aprimorada com tratamento antifalha
+            const seguradoras = require('../data/seguradoras.json');
+            let seguradoraSelecionada = null;
+
+            // Procura por option_number
+            const optionMatch = input.match(/option_(\d+)/);
+            if (optionMatch) {
+                const optionNumber = parseInt(optionMatch[1]) - 1;
+                if (optionNumber >= 0 && optionNumber < seguradoras.length) {
+                    seguradoraSelecionada = seguradoras[optionNumber];
+                }
+            } else {
+                // Procura por ID ou nome da seguradora
+                seguradoraSelecionada = seguradoras.find(seg => 
+                    input.includes(seg.id) || 
+                    normalized.includes(seg.nome.toLowerCase()) ||
+                    normalized.includes(seg.id)
+                );
+            }
+
+            if (seguradoraSelecionada) {
+                // Mostra contatos formatados para sinistro
+                const seguradoraInfo = menuService.getSeguradoraInfo(seguradoraSelecionada.id);
+                await whatsappService.sendText(from, seguradoraInfo);
+
+                // Finalização padronizada
+                setTimeout(async () => {
+                    const finalizationMenu = menuService.finalizationMenu();
+                    stateManager.updateUserSession(from, { 
+                        currentFlow: 'finalization',
+                        currentStep: 'menu_finalizacao' 
+                    });
+                    await whatsappService.sendListMessage(from, finalizationMenu);
+                }, 2000);
+
+                return true;
+            }
+
+            // CORREÇÃO: Tratamento de input inválido
+            await whatsappService.sendText(from,
+                '❓ *Seguradora não reconhecida*\n\n' +
+                'Por favor, selecione uma seguradora da lista ou:\n\n' +
+                '💡 Digite "menu" para voltar ao menu principal\n' +
+                '💡 Digite "atendente" para falar com um corretor'
+            );
+
+            // Reexibe o menu de sinistro
+            return await this.sendSinistroMenu(from);
+            
+        } catch (error) {
+            console.error('❌ Erro no fluxo de sinistro:', error);
+            
+            // CORREÇÃO: Tratamento antifalha
+            await whatsappService.sendText(from,
+                '🔧 *Erro técnico momentâneo*\n\n' +
+                'Estamos resolvendo rapidamente!\n\n' +
+                '💡 Digite "atendente" para falar com nosso suporte.'
+            );
+            
             stateManager.updateUserSession(from, { currentFlow: 'main_menu' });
             return await this.sendMainMenu(from);
         }
-
-        await whatsappService.sendText(from,
-            '🚨 *Comunicação de Sinistro*\n\n' +
-            '⚠️ *IMPORTANTE: Em caso de emergência, ligue imediatamente para:*\n' +
-            '🚑 SAMU: 192\n' +
-            '🚒 Bombeiros: 193\n' +
-            '👮 Polícia: 190\n\n' +
-            '📞 *Para comunicar sinistro:*\n' +
-            '1️⃣ Entre em contato direto com sua seguradora\n' +
-            '2️⃣ Tenha em mãos sua apólice\n' +
-            '3️⃣ Relate todos os detalhes do ocorrido\n\n' +
-            '🏢 Vou te conectar com nosso atendimento para te orientar sobre os próximos passos.'
-        );
-
-        return await this.transferToHuman(from);
-    }
-
-    /**
-     * Envia menu de segunda via
-     * @param {string} from - Número do usuário
-     * @returns {Promise<boolean>} Sucesso do envio
-     */
-    async sendSegundaViaMenu(from) {
-        const menu = menuService.segundaViaMenu();
-        return await whatsappService.sendListMessage(from, menu);
-    }
-
-    /**
-     * Manipula fluxo de segunda via
-     * @param {string} from - Número do usuário
-     * @param {string} input - Entrada do usuário
-     * @param {Object} session - Sessão do usuário
-     * @returns {Promise<boolean>} Sucesso do processamento
-     */
-    async handleSegundaVia(from, input, session) {
-        const normalized = utils.normalizeText(input);
-
-        if (input.includes('voltar') || normalized.includes('voltar')) {
-            stateManager.updateUserSession(from, { currentFlow: 'main_menu' });
-            return await this.sendMainMenu(from);
-        }
-
-        await whatsappService.sendText(from,
-            '📄 *Segunda Via de Documentos*\n\n' +
-            'Para solicitar a segunda via dos seus documentos, nosso atendimento precisará verificar:\n\n' +
-            '📋 *Informações necessárias:*\n' +
-            '• Número da apólice\n' +
-            '• CPF do segurado\n' +
-            '• Tipo de documento solicitado\n\n' +
-            '⏱️ *Prazo de entrega:* Até 2 dias úteis\n\n' +
-            '💡 Vou te conectar com nosso atendimento para processar sua solicitação.'
-        );
-
-        return await this.transferToHuman(from);
-    }
-
-    /**
-     * Envia menu de pagamento
-     * @param {string} from - Número do usuário
-     * @returns {Promise<boolean>} Sucesso do envio
-     */
-    async sendPagamentoMenu(from) {
-        const menu = menuService.pagamentoMenu();
-        return await whatsappService.sendListMessage(from, menu);
-    }
-
-    /**
-     * Manipula fluxo de pagamento
-     * @param {string} from - Número do usuário
-     * @param {string} input - Entrada do usuário
-     * @param {Object} session - Sessão do usuário
-     * @returns {Promise<boolean>} Sucesso do processamento
-     */
-    async handlePagamento(from, input, session) {
-        const normalized = utils.normalizeText(input);
-
-        if (input.includes('voltar') || normalized.includes('voltar')) {
-            stateManager.updateUserSession(from, { currentFlow: 'main_menu' });
-            return await this.sendMainMenu(from);
-        }
-
-        await whatsappService.sendText(from,
-            '💰 *Informações de Pagamento*\n\n' +
-            '💳 *Formas de pagamento aceitas:*\n' +
-            '• Cartão de crédito (até 12x)\n' +
-            '• Débito automático\n' +
-            '• Boleto bancário\n' +
-            '• PIX\n\n' +
-            '📊 *Parcelamento:*\n' +
-            '• À vista com desconto\n' +
-            '• Parcelado conforme modalidade\n\n' +
-            '🏦 *Débito automático:*\n' +
-            '• Desconto adicional\n' +
-            '• Sem risco de atraso\n\n' +
-            '💡 Para configurar sua forma de pagamento ou tirar dúvidas específicas, vou te conectar com nosso atendimento.'
-        );
-
-        return await this.transferToHuman(from);
-    }
-
-    /**
-     * Envia menu de seguradoras
-     * @param {string} from - Número do usuário
-     * @returns {Promise<boolean>} Sucesso do envio
-     */
-    async sendSeguradorasMenu(from) {
-        const menu = menuService.seguradorasMenu();
-        return await whatsappService.sendListMessage(from, menu);
     }
 
     /**
@@ -513,35 +469,103 @@ class MainFlow {
      * @returns {Promise<boolean>} Sucesso do processamento
      */
     async handleSeguradoras(from, input, session) {
-        const normalized = utils.normalizeText(input);
+        try {
+            const normalized = utils.normalizeText(input);
 
-        if (input.includes('voltar') || normalized.includes('voltar')) {
+            // Voltar ao menu principal
+            if (input.includes('voltar') || normalized.includes('voltar') || utils.isRequestingBack(normalized)) {
+                stateManager.updateUserSession(from, { currentFlow: 'main_menu' });
+                return await this.sendMainMenu(from);
+            }
+
+            // CORREÇÃO: Detecção aprimorada e tratamento antifalha
+            const seguradoras = require('../data/seguradoras.json');
+            let seguradoraSelecionada = null;
+            
+            // Procura por option_number
+            const optionMatch = input.match(/option_(\d+)/);
+            if (optionMatch) {
+                const optionNumber = parseInt(optionMatch[1]) - 1;
+                if (optionNumber >= 0 && optionNumber < seguradoras.length) {
+                    seguradoraSelecionada = seguradoras[optionNumber];
+                }
+            } else {
+                // Procura por ID ou nome da seguradora
+                seguradoraSelecionada = seguradoras.find(seg => 
+                    input.includes(seg.id) || 
+                    normalized.includes(seg.nome.toLowerCase()) ||
+                    normalized.includes(seg.id)
+                );
+            }
+            
+            if (seguradoraSelecionada) {
+                // Mostra contatos da seguradora formatados
+                const info = menuService.getSeguradoraInfo(seguradoraSelecionada.id);
+                await whatsappService.sendText(from, info);
+                
+                // CORREÇÃO: Finalização padronizada após 2 segundos
+                setTimeout(async () => {
+                    const finalizationMenu = menuService.finalizationMenu();
+                    stateManager.updateUserSession(from, { 
+                        currentFlow: 'finalization',
+                        currentStep: 'menu_finalizacao' 
+                    });
+                    await whatsappService.sendListMessage(from, finalizationMenu);
+                }, 2000);
+                
+                return true;
+            }
+
+            // CORREÇÃO: Tratamento de input inválido
+            await whatsappService.sendText(from,
+                '❓ *Opção não reconhecida*\n\n' +
+                'Por favor, selecione uma seguradora da lista ou:\n\n' +
+                '💡 Digite "menu" para voltar ao menu principal\n' +
+                '💡 Digite "atendente" para falar com um corretor'
+            );
+            
+            // Reexibe o menu de seguradoras
+            return await this.sendSeguradorasMenu(from);
+            
+        } catch (error) {
+            console.error('❌ Erro no fluxo de seguradoras:', error);
+            
+            // CORREÇÃO: Tratamento antifalha
+            await whatsappService.sendText(from,
+                '🔧 *Ops! Algo deu errado*\n\n' +
+                'Estamos ajustando rapidinho!\n\n' +
+                '💡 Tente novamente ou digite "atendente" para falar com nosso suporte.'
+            );
+            
             stateManager.updateUserSession(from, { currentFlow: 'main_menu' });
             return await this.sendMainMenu(from);
         }
+    }
 
-        // Extrai ID da seguradora do input
-        const seguradoraMatch = input.match(/seg_(\w+)/);
-        if (seguradoraMatch) {
-            const seguradoraId = seguradoraMatch[1];
-            const info = menuService.getSeguradoraInfo(seguradoraId);
+    /**
+     * Envia menu de seguradoras parceiras
+     * @param {string} from - Número do usuário
+     * @returns {Promise<boolean>} Sucesso do envio
+     */
+    async sendSeguradorasMenu(from) {
+        try {
+            const menu = menuService.seguradorasMenu();
+            stateManager.updateUserSession(from, { 
+                currentFlow: 'seguradoras',
+                currentStep: 'selecao_seguradora'
+            });
+            return await whatsappService.sendListMessage(from, menu);
+        } catch (error) {
+            console.error('❌ Erro ao enviar menu de seguradoras:', error);
             
-            await whatsappService.sendText(from, info);
+            await whatsappService.sendText(from,
+                '🔧 *Erro técnico momentâneo*\n\n' +
+                'Estamos resolvendo rapidamente!\n\n' +
+                '💡 Digite "atendente" para falar com nosso suporte.'
+            );
             
-            // Oferece voltar ao menu
-            setTimeout(async () => {
-                await whatsappService.sendText(from, 
-                    '💡 Digite "menu" para voltar ao início ou "seguradoras" para ver outras seguradoras.'
-                );
-            }, 2000);
-            
-            return true;
+            return false;
         }
-
-        // Se não encontrou seguradora específica, mostra lista completa
-        const allSeguradoras = menuService.getAllSeguradorasText();
-        await whatsappService.sendText(from, allSeguradoras);
-        return true;
     }
 
     /**
@@ -569,47 +593,59 @@ class MainFlow {
     }
 
     /**
-     * Transfere para atendimento humano
+     * Transfere para atendimento humano com notificação SEPARADA
      * @param {string} from - Número do usuário
+     * @param {string} reason - Motivo da transferência
      * @returns {Promise<boolean>} Sucesso da transferência
      */
-    async transferToHuman(from) {
-        // Desativa o bot temporariamente
-        stateManager.disableBot(60); // 60 minutos
+    async transferToHuman(from, reason = 'Solicitação de atendimento') {
+        // Obtém dados do usuário se disponíveis
+        const session = stateManager.getUserSession(from);
+        const clientName = session.data?.cotacao?.nome || session.data?.nome || 'Não informado';
+        const clientEmail = session.data?.cotacao?.email || session.data?.email || '';
+        const clientContact = clientEmail || from.replace('@c.us', '');
 
-        // Limpa a sessão do usuário
-        stateManager.updateUserSession(from, { 
-            currentFlow: 'atendimento',
-            currentStep: 'transferido',
-            data: { transferred_at: Date.now() }
-        });
+        // CORREÇÃO CRÍTICA: Envia notificação APENAS para o corretor
+        await whatsappService.notifyBrokerTransfer(clientName, clientContact, reason);
 
+        // CORREÇÃO CRÍTICA: Envia mensagem APENAS para o cliente
         await whatsappService.sendText(from,
-            '👨‍💼 *Transferindo para Atendente*\n\n' +
-            '⏳ Aguarde um momento, você será atendido por um de nossos corretores especializados.\n\n' +
-            '📞 *Enquanto isso, você também pode nos contatar:*\n' +
-            '• WhatsApp: (11) 9999-9999\n' +
-            '• Telefone: (11) 3333-3333\n' +
+            '👨‍💼 *Transferindo para Atendente Especializado*\n\n' +
+            '⏳ Aguarde um momento, você será atendido por um de nossos corretores em breve.\n\n' +
+            '📞 *Contatos diretos da DJS Corretora:*\n' +
+            '• WhatsApp: (19) 99591-0737\n' +
+            '• Telefone: (19) 3403-3333\n' +
             '• E-mail: contato@djscorretora.com.br\n\n' +
             '💡 *Para retornar ao atendimento automático, digite "menu" a qualquer momento.*'
         );
+
+        // Desativa o bot temporariamente e atualiza sessão
+        stateManager.disableBot(60); // 60 minutos
+        stateManager.updateUserSession(from, { 
+            currentFlow: 'atendimento',
+            currentStep: 'transferido',
+            data: { transferred_at: Date.now(), reason: reason }
+        });
 
         return true;
     }
 
     /**
-     * Manipula opção inválida
+     * Manipula opção inválida com tratamento melhorado
      * @param {string} from - Número do usuário
      * @returns {Promise<boolean>} Sucesso do envio
      */
     async handleInvalidOption(from) {
         await whatsappService.sendText(from,
             '❓ *Opção não reconhecida*\n\n' +
-            'Por favor, escolha uma das opções do menu ou use os comandos:\n\n' +
-            '🔸 "menu" - Voltar ao início\n' +
-            '🔸 "atendente" - Falar com corretor\n' +
-            '🔸 "seguradoras" - Ver contatos\n\n' +
-            'Ou escolha uma opção do menu anterior.'
+            'Escolha uma das opções abaixo:\n\n' +
+            '🔹 Tentar novamente\n' +
+            '🔹 Voltar ao menu anterior\n' +
+            '🔹 Encerrar atendimento\n\n' +
+            '💡 *Comandos úteis:*\n' +
+            '• "menu" - Voltar ao início\n' +
+            '• "atendente" - Falar com corretor\n' +
+            '• "seguradoras" - Ver contatos'
         );
         return false;
     }
@@ -653,6 +689,61 @@ class MainFlow {
         );
         
         return false;
+    }
+
+    /**
+     * Manipula fluxo de finalização padronizado
+     * @param {string} from - Número do usuário
+     * @param {string} input - Entrada do usuário
+     * @param {Object} session - Sessão do usuário
+     * @returns {Promise<boolean>} Sucesso do processamento
+     */
+    async handleFinalization(from, input, session) {
+        const normalized = utils.normalizeText(input);
+
+        // Voltar ao menu principal
+        if (input.includes('menu') || 
+            input.includes('option_1') || 
+            normalized.includes('voltar') ||
+            normalized.includes('menu principal') ||
+            utils.extractOptionNumber(input) === 1) {
+            
+            stateManager.updateUserSession(from, { currentFlow: 'main_menu' });
+            return await this.sendMainMenu(from);
+        }
+
+        // Encerrar conversa
+        if (input.includes('encerrar') || 
+            input.includes('option_2') || 
+            normalized.includes('encerrar') ||
+            normalized.includes('tchau') ||
+            utils.extractOptionNumber(input) === 2) {
+            
+            await whatsappService.sendText(from, 
+                '👋 *Conversa Encerrada*\n\n' +
+                'Obrigado por entrar em contato com a DJS Corretora! 😊\n\n' +
+                'Estamos sempre à disposição para te ajudar.\n\n' +
+                '💡 Digite "menu" a qualquer momento para reiniciar o atendimento.'
+            );
+            
+            // Limpa a sessão do usuário
+            stateManager.updateUserSession(from, { 
+                currentFlow: 'welcome',
+                currentStep: 'inicio',
+                data: {}
+            });
+            
+            return true;
+        }
+
+        // Input inválido, reexibe menu de finalização
+        await whatsappService.sendText(from, 
+            '❓ *Opção não reconhecida.*\n\n' +
+            'Por favor, escolha uma das opções abaixo:'
+        );
+        
+        const finalizationMenu = menuService.finalizationMenu();
+        return await whatsappService.sendListMessage(from, finalizationMenu);
     }
 }
 

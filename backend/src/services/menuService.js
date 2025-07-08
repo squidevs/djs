@@ -80,13 +80,8 @@ class MenuService {
             },
             {
                 key: 'segunda_via',
-                text: '📄 2ª Via de Documentos',
+                text: '📄 2ª Via de Documento/Boleto',
                 description: 'Solicitar segunda via'
-            },
-            {
-                key: 'pagamento',
-                text: '💳 Informações de Pagamento',
-                description: 'Consultar formas de pagamento'
             },
             {
                 key: 'seguradoras',
@@ -181,34 +176,19 @@ class MenuService {
     }
 
     /**
-     * Menu de informações de renovação
+     * Menu de informações de renovação - Simplificado
      * @returns {Object} Menu de renovação
      */
     static renovacaoMenu() {
         const options = [
             {
-                key: 'status',
-                text: '📊 Status da Renovação',
-                description: 'Consultar situação atual'
-            },
-            {
-                key: 'documentos',
-                text: '📄 Documentos Necessários',
-                description: 'Lista de documentos'
-            },
-            {
-                key: 'prazos',
-                text: '⏰ Prazos e Vencimentos',
-                description: 'Datas importantes'
-            },
-            {
                 key: 'contato',
-                text: '📞 Falar com Corretor',
+                text: '👨‍💼 Falar com Atendente',
                 description: 'Atendimento especializado'
             },
             {
                 key: 'voltar',
-                text: '⬅️ Voltar ao Menu',
+                text: '⬅️ Voltar ao Menu Principal',
                 description: 'Retornar ao menu anterior'
             }
         ];
@@ -216,53 +196,34 @@ class MenuService {
         return this.generateMenu(
             options,
             '🔄 Renovação de Apólice',
-            'O que você precisa saber sobre renovação?',
+            'Como posso te ajudar com sua renovação?',
             '📋 Selecionar'
         );
     }
 
     /**
-     * Menu de comunicação de sinistro
+     * Menu de comunicação de sinistro - Reestruturado para mostrar seguradoras
      * @returns {Object} Menu de sinistro
      */
     static sinistroMenu() {
-        const options = [
-            {
-                key: 'auto',
-                text: '🚗 Sinistro Automotivo',
-                description: 'Acidentes com veículos'
-            },
-            {
-                key: 'residencial',
-                text: '🏠 Sinistro Residencial',
-                description: 'Danos em residência'
-            },
-            {
-                key: 'vida',
-                text: '❤️ Sinistro de Vida',
-                description: 'Eventos cobertos pelo seguro de vida'
-            },
-            {
-                key: 'outros',
-                text: '📋 Outros Sinistros',
-                description: 'Outras modalidades'
-            },
-            {
-                key: 'status',
-                text: '📊 Acompanhar Sinistro',
-                description: 'Consultar andamento'
-            },
-            {
-                key: 'voltar',
-                text: '⬅️ Voltar ao Menu',
-                description: 'Retornar ao menu anterior'
-            }
-        ];
+        const seguradoras = require('../data/seguradoras.json');
+        
+        const options = seguradoras.map((seg, index) => ({
+            key: seg.id,
+            text: `${index + 1}. ${seg.nome}`,
+            description: `Assistência: ${seg.assistencia}`
+        }));
+
+        options.push({
+            key: 'voltar',
+            text: '⬅️ Voltar ao Menu Principal',
+            description: 'Retornar ao menu anterior'
+        });
 
         return this.generateMenu(
             options,
-            '🚨 Comunicação de Sinistro',
-            'Que tipo de sinistro você precisa comunicar?',
+            '🚨 Selecione sua Seguradora',
+            'Escolha sua seguradora para ver os contatos de sinistro:',
             '📋 Selecionar'
         );
     }
@@ -309,70 +270,29 @@ class MenuService {
     }
 
     /**
-     * Menu de informações de pagamento
-     * @returns {Object} Menu de pagamento
-     */
-    static pagamentoMenu() {
-        const options = [
-            {
-                key: 'formas',
-                text: '💳 Formas de Pagamento',
-                description: 'Opções disponíveis'
-            },
-            {
-                key: 'parcelamento',
-                text: '📊 Parcelamento',
-                description: 'Opções de parcelamento'
-            },
-            {
-                key: 'vencimento',
-                text: '📅 Alterar Vencimento',
-                description: 'Mudar data de vencimento'
-            },
-            {
-                key: 'debito',
-                text: '🏦 Débito Automático',
-                description: 'Configurar débito automático'
-            },
-            {
-                key: 'voltar',
-                text: '⬅️ Voltar ao Menu',
-                description: 'Retornar ao menu anterior'
-            }
-        ];
-
-        return this.generateMenu(
-            options,
-            '💰 Informações de Pagamento',
-            'Como posso te ajudar com pagamentos?',
-            '📋 Selecionar'
-        );
-    }
-
-    /**
-     * Gera texto com informações de seguradora
+     * Gera texto com informações de seguradora PROFISSIONAL (SEM markdown)
      * @param {string} seguradoraId - ID da seguradora
      * @returns {string} Texto formatado com informações
      */
     static getSeguradoraInfo(seguradoraId) {
+        const seguradoras = require('../data/seguradoras.json');
         const seguradora = seguradoras.find(s => s.id === seguradoraId);
         
         if (!seguradora) {
             return 'Seguradora não encontrada.';
         }
 
-        return `
-🏢 *${seguradora.nome}*
-
-📞 *WhatsApp:* ${seguradora.whatsapp}
-🆘 *Assistência 24h:* ${seguradora.assistencia}
-📞 *SAC:* ${seguradora.sac}
-🌐 *Site:* ${seguradora.site}
-
-💬 Para atendimento direto, clique no WhatsApp da seguradora ou ligue para os números informados.
-
-⚠️ *Importante:* Tenha em mãos sua apólice e documentos pessoais para atendimento mais ágil.
-        `.trim();
+        // CORREÇÃO: Formato limpo sem markdown (WhatsApp torna links clicáveis automaticamente)
+        return `🏢 *${seguradora.nome}*\n\n` +
+               `📞 Atendimento 24h (Sinistros):\n` +
+               `   ${seguradora.assistencia}\n\n` +
+               `📱 WhatsApp:\n` +
+               `   ${seguradora.whatsapp}\n\n` +
+               `🆘 SAC (Atendimento Geral):\n` +
+               `   ${seguradora.sac}\n\n` +
+               `🌐 Portal Online:\n` +
+               `   ${seguradora.site}\n\n` +
+               `💡 *Os números e links são clicáveis no WhatsApp*`;
     }
 
     /**
@@ -411,9 +331,7 @@ class MenuService {
             'seguradoras': () => this.seguradorasMenu(),
             'contatos': () => this.seguradorasMenu(),
             'segunda via': () => this.segundaViaMenu(),
-            'documentos': () => this.segundaViaMenu(),
-            'pagamento': () => this.pagamentoMenu(),
-            'boleto': () => this.pagamentoMenu()
+            'documentos': () => this.segundaViaMenu()
         };
 
         for (const [keyword, menuFunc] of Object.entries(menuMap)) {
@@ -423,6 +341,41 @@ class MenuService {
         }
 
         return null;
+    }
+
+    /**
+     * Menu padrão de finalização de fluxos
+     * @returns {Object} Menu de finalização
+     */
+    static finalizationMenu() {
+        const options = [
+            {
+                key: 'menu',
+                text: '🔙 Voltar ao Menu Principal',
+                description: 'Retornar ao menu principal'
+            },
+            {
+                key: 'encerrar',
+                text: '👋 Encerrar Conversa',
+                description: 'Finalizar atendimento'
+            }
+        ];
+
+        return this.generateMenu(
+            options,
+            '🎯 O que deseja fazer agora?',
+            'Escolha uma das opções abaixo:',
+            '📋 Escolher'
+        );
+    }
+
+    /**
+     * Cria mensagem de boas-vindas simplificada para clientes existentes
+     * @returns {string} Mensagem simplificada
+     */
+    static getExistingClientMessage() {
+        return '👋 Olá! Bem-vindo de volta à DJS Corretora de Seguros.\n\n' +
+               'Como posso te ajudar hoje?';
     }
 }
 

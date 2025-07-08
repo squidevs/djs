@@ -182,14 +182,15 @@ class Utils {
     }
 
     /**
-     * Valida CPF
+     * Valida CPF (aceita com ou sem máscara)
      * @param {string} cpf - CPF a ser validado
      * @returns {boolean}
      */
     static isValidCPF(cpf) {
         if (!cpf) return false;
         
-        const numbers = cpf.replace(/\D/g, '');
+        // Remove TODOS os caracteres não numéricos (pontos, hífens, espaços)
+        const numbers = cpf.replace(/[^\d]/g, '');
         if (numbers.length !== 11) return false;
         
         // Verifica se todos os dígitos são iguais
@@ -295,6 +296,58 @@ class Utils {
      */
     static delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    /**
+     * Verifica se usuário está solicitando voltar
+     * @param {string} text - Texto a ser verificado
+     * @returns {boolean}
+     */
+    static isRequestingBack(text) {
+        const normalized = this.normalizeText(text);
+        const backRequests = [
+            'voltar', 'volta', 'anterior', 'antes', 
+            'menu anterior', 'opcao anterior', 'back'
+        ];
+        
+        return backRequests.some(request => 
+            normalized.includes(request) || normalized === request
+        );
+    }
+
+    /**
+     * Verifica se é input inválido que precisa de tratamento especial
+     * @param {string} text - Texto a ser verificado
+     * @returns {boolean}
+     */
+    static isInvalidInput(text) {
+        const normalized = this.normalizeText(text);
+        
+        // Inputs muito curtos ou confusos
+        if (normalized.length < 1) return true;
+        if (/^[0-9]{10,}$/.test(normalized)) return true; // Apenas números longos
+        if (/^[^a-zA-Z0-9\s]+$/.test(normalized)) return true; // Apenas símbolos
+        
+        return false;
+    }
+
+    /**
+     * Aplica máscara no CPF
+     * @param {string} cpf - CPF para aplicar máscara
+     * @returns {string} CPF formatado
+     */
+    static maskCPF(cpf) {
+        if (!cpf) return '';
+        
+        // Remove tudo que não é número
+        const numbers = cpf.replace(/[^\d]/g, '');
+        
+        // Aplica a máscara XXX.XXX.XXX-XX
+        if (numbers.length === 11) {
+            return numbers.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+        
+        return cpf; // Retorna como estava se não for um CPF válido
     }
 }
 
