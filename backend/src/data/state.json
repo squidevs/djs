@@ -1,0 +1,842 @@
+{
+  "chatbot_is_on": true,
+  "bot_start_time": 1704067200000,
+  "sessions": {
+    "5519995910737@c.us": {
+      "phone": "5519995910737@c.us",
+      "currentFlow": "main_menu",
+      "currentStep": "finalizado",
+      "data": {
+        "cotacao": {
+          "tipo_seguro": "residencial",
+          "nome": "git",
+          "email": "git@gmail.com",
+          "cpf": "47593336816"
+        }
+      },
+      "history": [
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751230750136
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751230762127
+        },
+        {
+          "from": "main_menu",
+          "to": "seguradoras",
+          "timestamp": 1751230797515
+        },
+        {
+          "from": "seguradoras",
+          "to": "welcome",
+          "timestamp": 1751244849582
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751244849582
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751244859711
+        },
+        {
+          "from": "main_menu",
+          "to": "sinistro",
+          "timestamp": 1751244870906
+        },
+        {
+          "from": "sinistro",
+          "to": "atendimento",
+          "timestamp": 1751244877066
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751244905501
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751244905501
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751244909353
+        },
+        {
+          "from": "main_menu",
+          "to": "seguradoras",
+          "timestamp": 1751244914865
+        },
+        {
+          "from": "seguradoras",
+          "to": "welcome",
+          "timestamp": 1751245240888
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751245240889
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751245244811
+        },
+        {
+          "from": "main_menu",
+          "to": "atendimento",
+          "timestamp": 1751245257313
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751245271389
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751245271389
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751245278100
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751245284729
+        },
+        {
+          "from": "cotacao",
+          "to": "welcome",
+          "timestamp": 1751248021268
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751248021268
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751248028262
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751248031877
+        },
+        {
+          "from": "cotacao",
+          "to": "main_menu",
+          "timestamp": 1751248090333
+        },
+        {
+          "from": "main_menu",
+          "to": "welcome",
+          "timestamp": 1751286964913
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751286964913
+        },
+        {
+          "from": "welcome_response",
+          "to": "welcome",
+          "timestamp": 1751333173226
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751333173226
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751333179339
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751333185023
+        },
+        {
+          "from": "cotacao",
+          "to": "main_menu",
+          "timestamp": 1751333223310
+        },
+        {
+          "from": "main_menu",
+          "to": "welcome",
+          "timestamp": 1751333386780
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751333386780
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751333392061
+        },
+        {
+          "from": "main_menu",
+          "to": "seguradoras",
+          "timestamp": 1751333408273
+        },
+        {
+          "from": "seguradoras",
+          "to": "welcome",
+          "timestamp": 1751333439049
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751333439050
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751333982712
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751333989463
+        },
+        {
+          "from": "cotacao",
+          "to": "main_menu",
+          "timestamp": 1751334012815
+        }
+      ],
+      "createdAt": 1751230750136,
+      "lastActivity": 1751334012815
+    },
+    "5519983582245@c.us": {
+      "phone": "5519983582245@c.us",
+      "currentFlow": "main_menu",
+      "currentStep": "menu_principal",
+      "data": {
+        "tipo_usuario": "cliente"
+      },
+      "history": [
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751286978299
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751287126399
+        },
+        {
+          "from": "main_menu",
+          "to": "atendimento",
+          "timestamp": 1751287139963
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751287201154
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751287201154
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751287207269
+        },
+        {
+          "from": "main_menu",
+          "to": "renovacao",
+          "timestamp": 1751287237139
+        },
+        {
+          "from": "renovacao",
+          "to": "atendimento",
+          "timestamp": 1751287243641
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751287272168
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751287272168
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751287278613
+        },
+        {
+          "from": "main_menu",
+          "to": "pagamento",
+          "timestamp": 1751287283894
+        },
+        {
+          "from": "pagamento",
+          "to": "atendimento",
+          "timestamp": 1751287292033
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751287308138
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751287308138
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751287312843
+        },
+        {
+          "from": "main_menu",
+          "to": "sinistro",
+          "timestamp": 1751287318311
+        },
+        {
+          "from": "sinistro",
+          "to": "atendimento",
+          "timestamp": 1751287322914
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751287390168
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751287390168
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751287394837
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751287399168
+        },
+        {
+          "from": "cotacao",
+          "to": "main_menu",
+          "timestamp": 1751287455906
+        },
+        {
+          "from": "main_menu",
+          "to": "welcome",
+          "timestamp": 1751287840620
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751287840621
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751287847758
+        },
+        {
+          "from": "main_menu",
+          "to": "renovacao",
+          "timestamp": 1751287852606
+        },
+        {
+          "from": "renovacao",
+          "to": "atendimento",
+          "timestamp": 1751287862759
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751287883371
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751287883371
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751287888141
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751287898878
+        },
+        {
+          "from": "cotacao",
+          "to": "welcome",
+          "timestamp": 1751287912949
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751287912949
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751288540962
+        },
+        {
+          "from": "main_menu",
+          "to": "sinistro",
+          "timestamp": 1751288545953
+        },
+        {
+          "from": "sinistro",
+          "to": "atendimento",
+          "timestamp": 1751288550200
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751327718934
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751327718934
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751327727971
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751327732828
+        },
+        {
+          "from": "cotacao",
+          "to": "welcome",
+          "timestamp": 1751327797912
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751327797912
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751327814369
+        },
+        {
+          "from": "main_menu",
+          "to": "atendimento",
+          "timestamp": 1751327834715
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751327848674
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751327848674
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751327853645
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751327873134
+        },
+        {
+          "from": "cotacao",
+          "to": "welcome",
+          "timestamp": 1751327881367
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751327881367
+        },
+        {
+          "from": "welcome_response",
+          "to": "welcome",
+          "timestamp": 1751336095233
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751336095233
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751337386381
+        }
+      ],
+      "createdAt": 1751286978299,
+      "lastActivity": 1751337386381
+    },
+    "5519982373776@c.us": {
+      "phone": "5519982373776@c.us",
+      "currentFlow": "cotacao",
+      "currentStep": "tipo_seguro",
+      "data": {
+        "cotacao": {}
+      },
+      "history": [
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751287070860
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751287098958
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751287136893
+        },
+        {
+          "from": "cotacao",
+          "to": "atendimento",
+          "timestamp": 1751327586806
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751327609763
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751327609763
+        },
+        {
+          "from": "welcome_response",
+          "to": "welcome",
+          "timestamp": 1751327669383
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751327669383
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751327687432
+        },
+        {
+          "from": "main_menu",
+          "to": "sinistro",
+          "timestamp": 1751327700383
+        },
+        {
+          "from": "sinistro",
+          "to": "atendimento",
+          "timestamp": 1751327772528
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751328007216
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751328007216
+        },
+        {
+          "from": "welcome_response",
+          "to": "welcome",
+          "timestamp": 1751332853679
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751332853680
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751332866898
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751332929581
+        },
+        {
+          "from": "cotacao",
+          "to": "welcome",
+          "timestamp": 1751333162584
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751333162584
+        },
+        {
+          "from": "welcome_response",
+          "to": "welcome",
+          "timestamp": 1751333476764
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751333476764
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751333482648
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751334362040
+        },
+        {
+          "from": "cotacao",
+          "to": "main_menu",
+          "timestamp": 1751335226591
+        },
+        {
+          "from": "main_menu",
+          "to": "welcome",
+          "timestamp": 1751335284978
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751335284978
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751335291255
+        },
+        {
+          "from": "main_menu",
+          "to": "welcome",
+          "timestamp": 1751335370044
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751335370044
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751335551038
+        },
+        {
+          "from": "main_menu",
+          "to": "renovacao",
+          "timestamp": 1751335566553
+        },
+        {
+          "from": "renovacao",
+          "to": "atendimento",
+          "timestamp": 1751335605416
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751335656791
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751335656791
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751335663630
+        },
+        {
+          "from": "main_menu",
+          "to": "renovacao",
+          "timestamp": 1751335675975
+        },
+        {
+          "from": "renovacao",
+          "to": "atendimento",
+          "timestamp": 1751335701922
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751335724416
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751335724416
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751335745135
+        },
+        {
+          "from": "main_menu",
+          "to": "sinistro",
+          "timestamp": 1751335791113
+        },
+        {
+          "from": "sinistro",
+          "to": "atendimento",
+          "timestamp": 1751335825313
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751336091100
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751336091100
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751336218300
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751336231956
+        },
+        {
+          "from": "cotacao",
+          "to": "welcome",
+          "timestamp": 1751336383485
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751336383485
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751336397081
+        },
+        {
+          "from": "main_menu",
+          "to": "pagamento",
+          "timestamp": 1751336417133
+        },
+        {
+          "from": "pagamento",
+          "to": "atendimento",
+          "timestamp": 1751336438139
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751336611425
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751336611425
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751336630931
+        },
+        {
+          "from": "main_menu",
+          "to": "seguradoras",
+          "timestamp": 1751336652601
+        },
+        {
+          "from": "seguradoras",
+          "to": "welcome",
+          "timestamp": 1751336967672
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751336967672
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751336984591
+        },
+        {
+          "from": "main_menu",
+          "to": "atendimento",
+          "timestamp": 1751336991988
+        },
+        {
+          "from": "atendimento",
+          "to": "welcome",
+          "timestamp": 1751337365698
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751337365698
+        },
+        {
+          "from": "welcome_response",
+          "to": "main_menu",
+          "timestamp": 1751337383020
+        },
+        {
+          "from": "main_menu",
+          "to": "cotacao",
+          "timestamp": 1751337460536
+        }
+      ],
+      "createdAt": 1751287070851,
+      "lastActivity": 1751337460536
+    }
+  },
+  "stats": {
+    "total_messages": 182,
+    "total_users": 3,
+    "last_reset": 1704067200000
+  }
+}

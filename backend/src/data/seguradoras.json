@@ -1,0 +1,92 @@
+[
+  {
+    "id": "aliro",
+    "nome": "Aliro Seguros",
+    "whatsapp": "(11) 93228-8588",
+    "assistencia": "0800 770 1747",
+    "sac": "0800 777 7721",
+    "site": "https://www.aliroseguro.com.br/",
+    "categoria": "seguros_gerais"
+  },
+  {
+    "id": "allianz",
+    "nome": "Allianz Seguros",
+    "whatsapp": "(11) 4090-1110",
+    "assistencia": "0800 777 7243",
+    "sac": "0800 777 7243",
+    "site": "https://www.allianz.com.br/",
+    "categoria": "seguros_gerais"
+  },
+  {
+    "id": "bradesco",
+    "nome": "Bradesco Seguros",
+    "whatsapp": "(11) 4002-8484",
+    "assistencia": "0800 701 8484",
+    "sac": "0800 727 9999",
+    "site": "https://www.bradescoseguros.com.br/",
+    "categoria": "seguros_gerais"
+  },
+  {
+    "id": "porto",
+    "nome": "Porto Seguro",
+    "whatsapp": "(11) 3003-4655",
+    "assistencia": "0800 727 2742",
+    "sac": "0800 727 8118",
+    "site": "https://www.portoseguro.com.br/",
+    "categoria": "seguros_gerais"
+  },
+  {
+    "id": "mapfre",
+    "nome": "Mapfre Seguros",
+    "whatsapp": "(11) 4002-5555",
+    "assistencia": "0800 775 5555",
+    "sac": "0800 775 5555",
+    "site": "https://www.mapfre.com.br/",
+    "categoria": "seguros_gerais"
+  },
+  {
+    "id": "tokio",
+    "nome": "Tokio Marine Seguradora",
+    "whatsapp": "(11) 3040-7788",
+    "assistencia": "0800 012 1230",
+    "sac": "0800 012 1230",
+    "site": "https://www.tokiomarine.com.br/",
+    "categoria": "seguros_gerais"
+  },
+  {
+    "id": "liberty",
+    "nome": "Liberty Seguros",
+    "whatsapp": "(11) 4090-1563",
+    "assistencia": "0800 888 5432",
+    "sac": "0800 888 5432",
+    "site": "https://www.libertyseguros.com.br/",
+    "categoria": "seguros_gerais"
+  },
+  {
+    "id": "zurich",
+    "nome": "Zurich Seguros",
+    "whatsapp": "(11) 3048-6060",
+    "assistencia": "0800 887 9090",
+    "sac": "0800 887 9090",
+    "site": "https://www.zurich.com.br/",
+    "categoria": "seguros_gerais"
+  },
+  {
+    "id": "hdi",
+    "nome": "HDI Seguros",
+    "whatsapp": "(11) 3003-4104",
+    "assistencia": "0800 762 7744",
+    "sac": "0800 762 7744",
+    "site": "https://www.hdi.com.br/",
+    "categoria": "seguros_gerais"
+  },
+  {
+    "id": "sompo",
+    "nome": "Sompo Seguros",
+    "whatsapp": "(11) 3137-0202",
+    "assistencia": "0800 726 0202",
+    "sac": "0800 726 0202",
+    "site": "https://www.sompo.com.br/",
+    "categoria": "seguros_gerais"
+  }
+]
