@@ -8,6 +8,9 @@ const express = require('express');
 const cors = require('cors');
 const wppconnect = require('@wppconnect-team/wppconnect');
 
+// Configuração otimizada do Puppeteer para produção
+const { wppConnectPuppeteerConfig, testPuppeteerSetup } = require('./config/puppeteerConfig');
+
 // Importa módulos do sistema
 const stateManager = require('./core/stateManager');
 const cacheSystem = require('./core/cacheSystem');
@@ -526,47 +529,17 @@ class DJSChatbot {
                             break;
                     }
                 },
-                headless: process.env.HEADLESS !== 'false', // Padrão true
-                disableWelcome: process.env.DISABLE_WELCOME === 'true',
-                updatesLog: false,
-                autoClose: 0, // Nunca fecha automaticamente
+                ...wppConnectPuppeteerConfig, // Configuração otimizada para produção
+                autoClose: 0,
                 createPathFileToken: true,
                 waitForLogin: true,
                 deviceName: 'DJS Bot',
                 poweredBy: 'DJS Corretora',
-                browserWS: '',
-                browserArgs: [
-                    '--no-sandbox',
-                    '--disable-setuid-sandbox',
-                    '--disable-dev-shm-usage',
-                    '--disable-accelerated-2d-canvas',
-                    '--no-first-run',
-                    '--no-zygote',
-                    '--disable-gpu',
-                    '--disable-web-security',
-                    '--disable-features=VizDisplayCompositor'
-                ],
-                // Configurações de sessão persistente
-                puppeteerOptions: {
-                    userDataDir: './tokens/' + (process.env.SESSION_NAME || 'djs-bot'),
-                    args: [
-                        '--no-sandbox',
-                        '--disable-setuid-sandbox',
-                        '--disable-dev-shm-usage',
-                        '--disable-accelerated-2d-canvas',
-                        '--no-first-run',
-                        '--no-zygote',
-                        '--disable-gpu',
-                        '--disable-web-security',
-                        '--disable-features=VizDisplayCompositor'
-                    ]
-                },
-                // Configurações de retry e timeout
-                logQR: false,
                 tokenStore: 'file',
                 folderNameToken: './tokens',
                 mkdirFolderToken: '',
-                createPathFileToken: true,
+                logQR: false,
+                updatesLog: false
             });
 
             this.client = client;
