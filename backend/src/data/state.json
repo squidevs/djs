@@ -4,8 +4,8 @@
   "sessions": {
     "5519995910737@c.us": {
       "phone": "5519995910737@c.us",
-      "currentFlow": "finalization",
-      "currentStep": "finalizado",
+      "currentFlow": "welcome_response",
+      "currentStep": "aguardando_escolha",
       "data": {
         "cotacao": {
           "nome": "matheus",
@@ -298,10 +298,20 @@
           "from": "cotacao",
           "to": "finalization",
           "timestamp": 1751949789343
+        },
+        {
+          "from": "finalization",
+          "to": "welcome",
+          "timestamp": 1751953437455
+        },
+        {
+          "from": "welcome",
+          "to": "welcome_response",
+          "timestamp": 1751953437455
         }
       ],
       "createdAt": 1751946746562,
-      "lastActivity": 1751949789343
+      "lastActivity": 1751953437455
     },
     "5519999999999@c.us": {
       "phone": "5519999999999@c.us",
@@ -320,7 +330,7 @@
     }
   },
   "stats": {
-    "total_messages": 74,
+    "total_messages": 75,
     "total_users": 2,
     "last_reset": 1751946719888
   }

@@ -8,9 +8,6 @@ const express = require('express');
 const cors = require('cors');
 const wppconnect = require('@wppconnect-team/wppconnect');
 
-// Configuração otimizada do Puppeteer para produção
-const { wppConnectPuppeteerConfig, testPuppeteerSetup } = require('./config/puppeteerConfig');
-
 // Importa módulos do sistema
 const stateManager = require('./core/stateManager');
 const cacheSystem = require('./core/cacheSystem');
@@ -529,17 +526,42 @@ class DJSChatbot {
                             break;
                     }
                 },
-                ...wppConnectPuppeteerConfig, // Configuração otimizada para produção
+                headless: process.env.HEADLESS !== 'false',
+                disableWelcome: process.env.DISABLE_WELCOME === 'true',
+                updatesLog: false,
                 autoClose: 0,
                 createPathFileToken: true,
                 waitForLogin: true,
                 deviceName: 'DJS Bot',
                 poweredBy: 'DJS Corretora',
+                browserWS: '',
+                browserArgs: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-accelerated-2d-canvas',
+                    '--no-first-run',
+                    '--no-zygote',
+                    '--single-process',
+                    '--disable-gpu'
+                ],
+                puppeteerOptions: {
+                    userDataDir: './tokens/' + (process.env.SESSION_NAME || 'djs-bot'),
+                    args: [
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox', 
+                        '--disable-dev-shm-usage',
+                        '--disable-accelerated-2d-canvas',
+                        '--no-first-run',
+                        '--no-zygote',
+                        '--single-process',
+                        '--disable-gpu'
+                    ]
+                },
+                logQR: false,
                 tokenStore: 'file',
                 folderNameToken: './tokens',
                 mkdirFolderToken: '',
-                logQR: false,
-                updatesLog: false
             });
 
             this.client = client;

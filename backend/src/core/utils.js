@@ -331,24 +331,6 @@ class Utils {
         return false;
     }
 
-    /**
-     * Aplica máscara no CPF
-     * @param {string} cpf - CPF para aplicar máscara
-     * @returns {string} CPF formatado
-     */
-    static maskCPF(cpf) {
-        if (!cpf) return '';
-        
-        // Remove tudo que não é número
-        const numbers = cpf.replace(/[^\d]/g, '');
-        
-        // Aplica a máscara XXX.XXX.XXX-XX
-        if (numbers.length === 11) {
-            return numbers.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-        }
-        
-        return cpf; // Retorna como estava se não for um CPF válido
-    }
 }
 
 module.exports = Utils;
